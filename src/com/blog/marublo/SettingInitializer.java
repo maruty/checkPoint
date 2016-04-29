@@ -20,9 +20,9 @@ public class SettingInitializer{
 
 	public static Properties init() {
 		Properties properties = new Properties();
-		//try(BufferedInputStream buf = new BufferedInputStream(new FileInputStream("/var/lib/jenkins/jobs/pointApp/workspace/target/configuration.properties"));){
+		try(BufferedInputStream buf = new BufferedInputStream(new FileInputStream("//var/lib/jenkins/jobs/pointSend/workspace/target/configuration.properties"));){
 		//ローカル環境設定
-		try(BufferedInputStream buf = new BufferedInputStream(new FileInputStream("configuration.properties"));){
+		//try(BufferedInputStream buf = new BufferedInputStream(new FileInputStream("configuration.properties"));){
 		properties.load(buf);
 		}catch (Exception e) {
 			System.out.println("エラー処理に入った");
