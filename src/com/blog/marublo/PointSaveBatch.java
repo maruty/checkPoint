@@ -47,10 +47,10 @@ public class PointSaveBatch extends AbstractPointController{
 		List<String> pointList = MatchUtil.getPointList(pointTemp,"[0-9]");
 
 
-		System.out.println(MatchUtil.createPoint(pointList));
+		//System.out.println(MatchUtil.createPoint(pointList));
 
-		System.out.println("モッピー：" + pointTemp);
-		System.out.println("モッピー：" + pointList.get(0) + pointList.get(1));
+		//System.out.println("モッピー：" + pointTemp);
+		//System.out.println("モッピー：" + pointList.get(0) + pointList.get(1));
 
 		System.out.println(CalendarUtil.todayUnderNormal());
 
@@ -217,7 +217,7 @@ public class PointSaveBatch extends AbstractPointController{
 	//IO書き込み
 	public static void writeJsonFile(String str){
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter("test.txt"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter("/var/www/html/json/point.json"));
 			bw.write(str);
 			bw.flush();
 			bw.close();
