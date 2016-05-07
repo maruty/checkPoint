@@ -16,6 +16,10 @@ public class ExecPointController  {
     	AbstractPointController selenium = new PointSaveBatch();
     	selenium.execute();
 
+    	//System.out.println("D系対象ユーザースクリーニング処理開始");
+    	//selenium = new DkeiUserScreeningBatch();
+    	//selenium.execute();
+
     	//終了処理
         System.out.println("処理が終了しました");
 
