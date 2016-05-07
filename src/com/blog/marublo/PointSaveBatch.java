@@ -91,16 +91,31 @@ public class PointSaveBatch extends AbstractPointController{
 			mobatokuPoint.setYesterday(compareTheDayBefore(mobatokuTheDayBeforeList.get(0),mobatokuPoint));
 		}
 
-
-
 		//ポイントをDBに登録
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(mobatokuPoint);
+
+		System.out.println("FCレッスン数確認");
+		driver.get("http://133.242.235.62/workspace/");
+		driver.findElement(By.name("loginId")).sendKeys(SettingInitializer.getGmailTrade());
+		driver.findElement(By.name("loginPass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.findElement(By.cssSelector("body > div > div > div > div > div.panel-body > form > fieldset > input")).click();
+		String fcPoint = driver.findElement(By.cssSelector("#page-wrapper > div:nth-child(2) > div:nth-child(1) > div > div > div > div.col-xs-9.text-right > div.huge")).getText();
+		Point feelPoint = new Point("FC",fcPoint,CalendarUtil.todayUnderNormal());
+
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> fcTheDayBeforeList = DbUtil.selectPointData("FC");
+
+		if(fcTheDayBeforeList != null && fcTheDayBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			feelPoint.setYesterday(compareTheDayBefore(mobatokuTheDayBeforeList.get(0),feelPoint));
+		}
 
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
 		jsonList.add(moppyPoint);
 		jsonList.add(mobatokuPoint);
+		jsonList.add(feelPoint);
 
 		createJson(jsonList);
 
