@@ -42,7 +42,7 @@ public class DbUtil {
 	            Statement statement = (Statement) connection.createStatement();
 	        ) {
 				ResultSet rs =
-						statement.executeQuery("select * from POINT WHERE name = '" + siteName + "' ORDER BY date_info desc;");
+						statement.executeQuery("select * from POINT WHERE name = '" + siteName + "' ORDER BY date_info asc;");
 
 				while(rs.next()) {
 					Point point = new Point();

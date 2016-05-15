@@ -108,7 +108,7 @@ public class PointSaveBatch extends AbstractPointController{
 
 		if(fcTheDayBeforeList != null && fcTheDayBeforeList.size() > 0){
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
-			feelPoint.setYesterday(compareTheDayBefore(mobatokuTheDayBeforeList.get(0),feelPoint));
+			feelPoint.setYesterday(compareTheDayBefore(fcTheDayBeforeList.get(0),feelPoint));
 		}
 
 		//jsonファイルを作成する
