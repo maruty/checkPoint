@@ -111,6 +111,8 @@ public class PointSaveBatch extends AbstractPointController{
 			feelPoint.setYesterday(compareTheDayBefore(fcTheDayBeforeList.get(0),feelPoint));
 		}
 
+		DbUtil.insertPointData(feelPoint);
+
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
 		jsonList.add(moppyPoint);
