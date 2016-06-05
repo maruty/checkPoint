@@ -47,5 +47,13 @@ public class MatchUtil {
 		return point;
 	}
 
+	public static String changeBlank(String number) {
+
+
+
+
+		return number.trim();
+	}
+
 
 }

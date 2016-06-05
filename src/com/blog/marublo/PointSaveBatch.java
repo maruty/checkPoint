@@ -64,6 +64,30 @@ public class PointSaveBatch extends AbstractPointController{
 		//ポイントをDBに登録
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(moppyPoint);
+		//###############################################################################################
+		//メールdeポイント
+		System.out.println("メールdeポイント");
+		System.out.println("ログイン処理");
+		driver.get("https://member.pointmail.rakuten.co.jp/box/");
+		driver.findElement(By.name("u")).sendKeys(SettingInitializer.getGmailId());
+		driver.findElement(By.name("p")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+
+		//#status > ul > li.point > p > strong
+		String maildepoint = driver.findElement(By.cssSelector("#status > ul > li.point > p > strong")).getText();
+		maildepoint = MatchUtil.changeBlank(maildepoint);
+
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> maildepointList = DbUtil.selectPointData("maildepoint");
+
+		//インサート用データ
+		Point maildepointPoint = new Point("maildepoint",maildepoint , CalendarUtil.todayUnderNormal());
+
+		if(maildepointList != null && maildepointList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			maildepointPoint.setYesterday(compareTheDayBefore(maildepointList.get(0),maildepointPoint));
+		}
+
+		//###############################################################################################
 
 		System.out.println("モバトクTOP");
 		System.out.println("ログイン処理");
@@ -117,6 +141,7 @@ public class PointSaveBatch extends AbstractPointController{
 		List<Point> jsonList = new ArrayList<>();
 		jsonList.add(moppyPoint);
 		jsonList.add(mobatokuPoint);
+		jsonList.add(maildepointPoint);
 		jsonList.add(feelPoint);
 
 		createJson(jsonList);
