@@ -71,6 +71,9 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.get("https://member.pointmail.rakuten.co.jp/box/");
 		driver.findElement(By.name("u")).sendKeys(SettingInitializer.getGmailId());
 		driver.findElement(By.name("p")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+
+		driver.findElement(By.cssSelector("#loginInner > p:nth-child(3) > input")).click();
+
 		System.out.println("ログイン完了");
 		//#status > ul > li.point > p > strong
 		String maildepoint = driver.findElement(By.cssSelector("#status > ul > li.point > p > strong")).getText();
