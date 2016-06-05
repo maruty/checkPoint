@@ -71,11 +71,11 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.get("https://member.pointmail.rakuten.co.jp/box/");
 		driver.findElement(By.name("u")).sendKeys(SettingInitializer.getGmailId());
 		driver.findElement(By.name("p")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
-
+		System.out.println("ログイン完了");
 		//#status > ul > li.point > p > strong
 		String maildepoint = driver.findElement(By.cssSelector("#status > ul > li.point > p > strong")).getText();
 		maildepoint = MatchUtil.changeBlank(maildepoint);
-
+		//#status > ul > li.point > p > strong
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> maildepointList = DbUtil.selectPointData("maildepoint");
 
