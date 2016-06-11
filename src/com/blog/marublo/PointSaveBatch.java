@@ -18,6 +18,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 public class PointSaveBatch extends AbstractPointController{
 	public PointSaveBatch(){
@@ -28,68 +29,37 @@ public class PointSaveBatch extends AbstractPointController{
 
 		String pointTemp ="";
 
-		System.out.println("モッピー：TOP");
-		driver.get("http://pc.moppy.jp/");
-
-		System.out.println("モッピー：ログインフォーム");
-		driver.get("https://ssl.pc.moppy.jp/login/");
-		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.MOPPY_USERID);
-		driver.findElement(By.name("pass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
-		//driver.findElement(By.name("autologin")).click();
-		driver.findElement(By.cssSelector("#content  section  div  form  div  div  button  span")).
-		click();
-		System.out.println("モッピー：ログイン成功");
-
+		//モッピーログイン
+		moppyLogin(driver);
 		driver.get("http://pc.moppy.jp/bankbook/");
 		//ポイント表示部をパース
 		pointTemp = driver.findElement(By.cssSelector("#point_blinking")).getText();
-
 		List<String> pointList = MatchUtil.getPointList(pointTemp,"[0-9]");
-
-
-		//System.out.println(MatchUtil.createPoint(pointList));
-
-		//System.out.println("モッピー：" + pointTemp);
-		//System.out.println("モッピー：" + pointList.get(0) + pointList.get(1));
-
-		System.out.println(CalendarUtil.todayUnderNormal());
-
 		Point moppyPoint = new Point("moppy", MatchUtil.createPoint(pointList), (CalendarUtil.todayUnderNormal()));
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> moppyList = DbUtil.selectPointData("moppy");
 		if(moppyList != null && moppyList.size() > 0){
 			moppyPoint.setYesterday(compareTheDayBefore(moppyList.get(0),moppyPoint));
 		}
-
 		//ポイントをDBに登録
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(moppyPoint);
+
 		//###############################################################################################
-		//メールdeポイント
-		System.out.println("メールdeポイント");
-		System.out.println("ログイン処理");
-		driver.get("https://member.pointmail.rakuten.co.jp/box/");
-		driver.findElement(By.name("u")).sendKeys(SettingInitializer.getGmailId());
-		driver.findElement(By.name("p")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
-
-		driver.findElement(By.cssSelector("#loginInner > p:nth-child(3) > input")).click();
-
-		System.out.println("ログイン完了");
-		//#status > ul > li.point > p > strong
+		//メールdeポイントログイン
+		maildeLogin(driver);
+		//ポイント取得
 		String maildepoint = driver.findElement(By.cssSelector("#status > ul > li.point > p > strong")).getText();
 		maildepoint = MatchUtil.changeBlank(maildepoint);
-		//#status > ul > li.point > p > strong
+
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> maildepointList = DbUtil.selectPointData("maildepoint");
-
 		//インサート用データ
 		Point maildepointPoint = new Point("maildepoint",maildepoint , CalendarUtil.todayUnderNormal());
-
 		if(maildepointList != null && maildepointList.size() > 0){
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
 			maildepointPoint.setYesterday(compareTheDayBefore(maildepointList.get(0),maildepointPoint));
 		}
-
 		//###############################################################################################
 
 		System.out.println("モバトクTOP");
@@ -121,6 +91,7 @@ public class PointSaveBatch extends AbstractPointController{
 		//ポイントをDBに登録
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(mobatokuPoint);
+		//###############################################################################################
 
 		System.out.println("FCレッスン数確認");
 		driver.get("http://133.242.235.62/workspace/");
@@ -139,12 +110,38 @@ public class PointSaveBatch extends AbstractPointController{
 		}
 
 		DbUtil.insertPointData(feelPoint);
+		//###############################################################################################
+		System.out.println("ハピトクポイント確認");
+
+		driver.get("http://hapitas.jp/");
+		driver.get("http://hapitas.jp/auth/signin/");
+
+		System.out.println("ハピタス：ログインフォーム");
+		driver.findElement(By.cssSelector("#email_main")).sendKeys(SettingInitializer.getGmailId());
+		driver.findElement(By.cssSelector("#password_main")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.findElement(By.cssSelector("#login_keep_main")).click();
+		driver.findElement(By.cssSelector("#post_review > div > p.mb10.pt5 > input")).click();
+
+		String hapipoint = driver.findElement(By.cssSelector("#global-navigation > div > ul.usernavi > li.usernavi-li.usernavi-status > a.usernavi-point")).getText();
+
+		Point hapitasuPoint = new Point("hapitasu",hapipoint,CalendarUtil.todayUnderNormal());
+
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> hapitasBeforeList = DbUtil.selectPointData("hapitasu");
+
+		if(hapitasBeforeList != null && hapitasBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			hapitasuPoint.setYesterday(compareTheDayBefore(hapitasBeforeList.get(0),hapitasuPoint));
+		}
+		DbUtil.insertPointData(hapitasuPoint);
+		//###############################################################################################
 
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
 		jsonList.add(moppyPoint);
 		jsonList.add(mobatokuPoint);
 		jsonList.add(maildepointPoint);
+		jsonList.add(hapitasuPoint);
 		jsonList.add(feelPoint);
 
 		createJson(jsonList);
@@ -152,6 +149,30 @@ public class PointSaveBatch extends AbstractPointController{
 
 
 		driver.quit();
+	}
+
+	public void moppyLogin(WebDriver driver){
+		System.out.println("モッピー：TOP");
+		driver.get("http://pc.moppy.jp/");
+
+		System.out.println("モッピー：ログインフォーム");
+		driver.get("https://ssl.pc.moppy.jp/login/");
+		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.MOPPY_USERID);
+		driver.findElement(By.name("pass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		//driver.findElement(By.name("autologin")).click();
+		driver.findElement(By.cssSelector("#content  section  div  form  div  div  button  span")).
+		click();
+		System.out.println("モッピー：ログイン成功");
+	}
+
+	public void maildeLogin(WebDriver driver){
+		System.out.println("メールdeポイント");
+		System.out.println("ログイン処理");
+		driver.get("https://member.pointmail.rakuten.co.jp/box/");
+		driver.findElement(By.name("u")).sendKeys(SettingInitializer.getGmailId());
+		driver.findElement(By.name("p")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.findElement(By.cssSelector("#loginInner > p:nth-child(3) > input")).click();
+		System.out.println("ログイン完了");
 	}
 
 	public static void createJson(List<Point> pointList){

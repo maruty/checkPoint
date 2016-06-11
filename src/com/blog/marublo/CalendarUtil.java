@@ -11,6 +11,7 @@ public class CalendarUtil {
 	}
 
 	public static String todayUnderNormal(){
+		//今日の日付をyyyy/mm/ddで返す
 		Calendar cal = Calendar.getInstance();
 
 		return cal.get(Calendar.YEAR) + "/" + (cal.get(Calendar.MONTH) + 1) +"/" + cal.get(Calendar.DATE);
