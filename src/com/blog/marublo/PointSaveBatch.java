@@ -131,7 +131,7 @@ public class PointSaveBatch extends AbstractPointController{
 
 		if(hapitasBeforeList != null && hapitasBeforeList.size() > 0){
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
-			hapitasuPoint.setYesterday(compareTheDayBefore(hapitasBeforeList.get(0),hapitasuPoint));
+			//hapitasuPoint.setYesterday(compareTheDayBefore(hapitasBeforeList.get(0),hapitasuPoint));
 		}
 		DbUtil.insertPointData(hapitasuPoint);
 		//###############################################################################################
