@@ -9,6 +9,9 @@ public class ExecPointController  {
     	AbstractPointController driver = new PointSaveBatch();
     	driver.execute();
 
+    	//AbstractPointController driver = new TestExecute();
+    	//driver.execute();
+
     	//終了処理
         System.out.println("処理が終了しました");
 
