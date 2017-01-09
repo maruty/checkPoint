@@ -25,41 +25,52 @@ public class PointSaveBatch extends AbstractPointController{
 		super();
 	}
 
-	public void execute(){
+	public void execute() throws InterruptedException{
 
 		String pointTemp ="";
 
-		//モッピーログイン
-		moppyLogin(driver);
-		driver.get("http://pc.moppy.jp/bankbook/");
+
+		//MoppyController moppyController = new MoppyController();
+
+			//モッピーログイン
+		//moppyController.login(driver);
+
 		//ポイント表示部をパース
+		/*
 		pointTemp = driver.findElement(By.cssSelector("#point_blinking")).getText();
 		List<String> pointList = MatchUtil.getPointList(pointTemp,"[0-9]");
 		Point moppyPoint = new Point("moppy", MatchUtil.createPoint(pointList), (CalendarUtil.todayUnderNormal()));
+		*/
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		/*
 		List<Point> moppyList = DbUtil.selectPointData("moppy");
 		if(moppyList != null && moppyList.size() > 0){
 			moppyPoint.setYesterday(compareTheDayBefore(moppyList.get(0),moppyPoint));
 		}
+		*/
 		//ポイントをDBに登録
+		/*
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(moppyPoint);
+		*/
 
 		//###############################################################################################
 		//メールdeポイントログイン
-		maildeLogin(driver);
+		//maildeLogin(driver);
 		//ポイント取得
-		String maildepoint = driver.findElement(By.cssSelector("#status > ul > li.point > p > strong")).getText();
-		maildepoint = MatchUtil.changeBlank(maildepoint);
+		//String maildepoint = driver.findElement(By.cssSelector("#status > ul > li.point > p > strong")).getText();
+		//maildepoint = MatchUtil.changeBlank(maildepoint);
 
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
-		List<Point> maildepointList = DbUtil.selectPointData("maildepoint");
+		//List<Point> maildepointList = DbUtil.selectPointData("maildepoint");
 		//インサート用データ
+		/*
 		Point maildepointPoint = new Point("maildepoint",maildepoint , CalendarUtil.todayUnderNormal());
 		if(maildepointList != null && maildepointList.size() > 0){
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
 			maildepointPoint.setYesterday(compareTheDayBefore(maildepointList.get(0),maildepointPoint));
 		}
+		*/
 		//###############################################################################################
 
 		System.out.println("モバトクTOP");
@@ -111,6 +122,7 @@ public class PointSaveBatch extends AbstractPointController{
 
 		DbUtil.insertPointData(feelPoint);
 		//###############################################################################################
+		/*
 		System.out.println("ハピトクポイント確認");
 
 		driver.get("http://hapitas.jp/");
@@ -125,8 +137,9 @@ public class PointSaveBatch extends AbstractPointController{
 		String hapipoint = driver.findElement(By.cssSelector("#global-navigation > div > ul.usernavi > li.usernavi-li.usernavi-status > a.usernavi-point")).getText();
 
 		Point hapitasuPoint = new Point("hapitasu",hapipoint,CalendarUtil.todayUnderNormal());
-
+		*/
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		/*
 		List<Point> hapitasBeforeList = DbUtil.selectPointData("hapitasu");
 
 		if(hapitasBeforeList != null && hapitasBeforeList.size() > 0){
@@ -134,14 +147,15 @@ public class PointSaveBatch extends AbstractPointController{
 			//hapitasuPoint.setYesterday(compareTheDayBefore(hapitasBeforeList.get(0),hapitasuPoint));
 		}
 		DbUtil.insertPointData(hapitasuPoint);
+		*/
 		//###############################################################################################
 
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
-		jsonList.add(moppyPoint);
+		//jsonList.add(moppyPoint);
 		jsonList.add(mobatokuPoint);
-		jsonList.add(maildepointPoint);
-		jsonList.add(hapitasuPoint);
+		//jsonList.add(maildepointPoint);
+		//jsonList.add(hapitasuPoint);
 		jsonList.add(feelPoint);
 
 		createJson(jsonList);
