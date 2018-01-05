@@ -55,5 +55,19 @@ public class MatchUtil {
 		return number.trim();
 	}
 
+	public static boolean isUpdateLesson(Lesson beforeLesson, Lesson lesson) {
+		if(beforeLesson.getLessonDate().equals(lesson.getLessonDate()) && 
+		   beforeLesson.getLessonTenpo().equals(lesson.getLessonTenpo()) && 
+	       beforeLesson.getLessonName().equals(lesson.getLessonName()) && 
+	    	   beforeLesson.getLessonInstructor().equals(lesson.getLessonInstructor()) &&
+	    	   beforeLesson.getLessonTimeFrom().equals(lesson.getLessonTimeFrom())) {
+			
+			
+			return false;
+		}
+		
+		return true;
+	}
+
 
 }

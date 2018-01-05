@@ -16,5 +16,15 @@ public class CalendarUtil {
 
 		return cal.get(Calendar.YEAR) + "/" + (cal.get(Calendar.MONTH) + 1) +"/" + cal.get(Calendar.DATE);
 	}
+	
+	public static String divideFrom(String str) {
+		//前後の空白削除
+		return null;
+	}
+	
+	public static String divideTo(String str) {
+		//前後の空白削除
+		return null;
+	}
 
 }

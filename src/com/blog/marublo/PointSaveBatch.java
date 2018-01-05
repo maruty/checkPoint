@@ -1,4 +1,7 @@
+
 package com.blog.marublo;
+
+
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -19,6 +22,14 @@ import javax.mail.internet.MimeMessage;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import com.blog.marublo.AbstractPointController;
+import com.blog.marublo.CalendarUtil;
+import com.blog.marublo.DbUtil;
+import com.blog.marublo.MatchUtil;
+import com.blog.marublo.Point;
+import com.blog.marublo.SettingInitializer;
+import com.sun.jna.platform.win32.DBT;
 
 public class PointSaveBatch extends AbstractPointController{
 	public PointSaveBatch(){
@@ -149,7 +160,58 @@ public class PointSaveBatch extends AbstractPointController{
 		DbUtil.insertPointData(hapitasuPoint);
 		*/
 		//###############################################################################################
-
+		
+		
+		//2018/1/5 b-monsterのレッスン情報を新たにインサートする
+		System.out.println("b-monsterレッスン数取得");
+		driver.get("https://www.b-monster.jp/");
+		//#g-console > li:nth-child(1) > button
+		driver.findElement(By.cssSelector("#g-console > li:nth-child(1) > button")).click();
+		driver.findElement(By.name("login-username")).sendKeys(SettingInitializer.getGmailTrade());
+		driver.findElement(By.name("login-password")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.findElement(By.cssSelector("#login-btn")).click();
+		
+		//マイページ表示
+		//最新の1件をダウソ、インサート
+		//#lesson-status > div:nth-child(2)
+		//日付
+		//#lesson-status > div:nth-child(2) > table > tbody > tr.form-group.latest-reserve > td > strong
+		//会場
+		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(2) > td > strong
+		//時間
+		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong
+		//レッスン名
+		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(4) > td > strong
+		//パフォーマー
+		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > strong
+		//サンドバック
+		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(6) > td > strong
+		
+		if(0 < driver.findElements(By.cssSelector("#lesson-status > div:nth-child(2)")).size()) {
+			Lesson lesson = new Lesson();
+			lesson.setLessonDate(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr.form-group.latest-reserve > td > strong")).getText());
+			lesson.setLessonTenpo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText());
+			lesson.setLessonTimeFrom(CalendarUtil.divideFrom(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText()));
+			lesson.setLessonTimeTo(CalendarUtil.divideTo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText()));
+			lesson.setLessonName(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(4) > td > strong")).getText());
+			lesson.setLessonInstructor(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > strong")).getText());
+			lesson.setLessonMashine(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(6) > td > strong")).getText());
+			
+			Lesson beforeLesson = new Lesson();
+			beforeLesson = DbUtil.getBmonLessonDate();
+			
+			//直近と最新のレッスンが同じかの判定
+			if(MatchUtil.isUpdateLesson(beforeLesson,lesson)) {
+				//異なっていたらインサート
+				DbUtil.insertBmonData(lesson);
+			}
+		}
+		
+		//b-monのレッスン数カウント
+		int bmonCount = DbUtil.countBmonLesson();
+		Point bmonPoint = new Point();
+		bmonPoint.setName("b-monster");
+		bmonPoint.setPoint(String.valueOf(bmonCount));
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
 		//jsonList.add(moppyPoint);
@@ -157,8 +219,10 @@ public class PointSaveBatch extends AbstractPointController{
 		//jsonList.add(maildepointPoint);
 		//jsonList.add(hapitasuPoint);
 		jsonList.add(feelPoint);
+		jsonList.add(bmonPoint);
 
 		createJson(jsonList);
+		
 
 
 

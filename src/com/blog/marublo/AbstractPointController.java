@@ -5,7 +5,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class AbstractPointController implements PointInterface{
 
-	WebDriver driver;
+	protected WebDriver driver;
 
 	public AbstractPointController(){
 		driver = new FirefoxDriver();
