@@ -45,8 +45,7 @@ public class DbUtil {
             		+ "VALUES ('" + lesson.getLessonMashine() + "', '" + lesson.getLessonTenpo() + "', '"
             		+ lesson.getLessonTimeTo() +  "', '" + lesson.getLessonTimeFrom() + "', '"
     				+ lesson.getLessonDate() +  "', '" + lesson.getLessonInstructor() + "', '"
-    				+ lesson.getLessonName() +  "', '" + "yanagisawa.trade@gmail.com"+ "', '"
-            		+ "');";
+    				+ lesson.getLessonName() +  "', '" + "yanagisawa.trade@gmail.com"+ "');";
             int result = statement.executeUpdate(sql);
             //System.out.println("結果２：" + result);
 
