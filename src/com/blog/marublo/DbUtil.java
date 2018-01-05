@@ -128,6 +128,7 @@ public class DbUtil {
 						statement.executeQuery("select COUNT(*) from BMON_LESSON ORDER;");
 				while(rs.next()) {
 					count = rs.getString(1);
+					System.out.println(count.toString());
 				}
 
 	        } catch (SQLException e) {
