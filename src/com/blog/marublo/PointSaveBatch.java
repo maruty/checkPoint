@@ -197,6 +197,10 @@ public class PointSaveBatch extends AbstractPointController{
 			lesson.setLessonInstructor(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > strong")).getText());
 			lesson.setLessonMashine(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(6) > td > strong")).getText());
 			
+			System.out.println("レッスン詳細:" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
+			
+			
+			
 			Lesson beforeLesson = new Lesson();
 			beforeLesson = DbUtil.getBmonLessonDate();
 			
