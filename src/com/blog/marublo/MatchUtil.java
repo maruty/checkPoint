@@ -56,11 +56,11 @@ public class MatchUtil {
 	}
 
 	public static boolean isUpdateLesson(Lesson beforeLesson, Lesson lesson) {
-		if(beforeLesson.getLessonDate().equals(lesson.getLessonDate()) && 
-		   beforeLesson.getLessonTenpo().equals(lesson.getLessonTenpo()) && 
-	       beforeLesson.getLessonName().equals(lesson.getLessonName()) && 
-	    	   beforeLesson.getLessonInstructor().equals(lesson.getLessonInstructor()) &&
-	    	   beforeLesson.getLessonTimeFrom().equals(lesson.getLessonTimeFrom())) {
+		if(lesson.getLessonDate().equals(beforeLesson.getLessonDate()) && 
+				lesson.getLessonTenpo().equals(beforeLesson.getLessonTenpo()) && 
+				lesson.getLessonName().equals(beforeLesson.getLessonName()) && 
+				lesson.getLessonInstructor().equals(beforeLesson.getLessonInstructor()) &&
+				lesson.getLessonTimeFrom().equals(beforeLesson.getLessonTimeFrom())) {
 			
 			
 			return false;

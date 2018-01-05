@@ -206,12 +206,16 @@ public class PointSaveBatch extends AbstractPointController{
 			
 			//初回のみ通るロジック
 			if(beforeLesson == null || lesson != null) {
+				System.out.println("レッスンインサートロジック");
+
 				DbUtil.insertBmonData(lesson);
 				System.out.println("レッスンインサート(初回):" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
 			}
 			
 			
 			if(beforeLesson != null || lesson != null) {
+				System.out.println("レッスン2回目ロジック");
+
 				//直近と最新のレッスンが同じかの判定
 				if(MatchUtil.isUpdateLesson(beforeLesson,lesson)) {
 					//異なっていたらインサート
