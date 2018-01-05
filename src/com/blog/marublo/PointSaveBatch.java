@@ -170,7 +170,7 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.findElement(By.name("login-username")).sendKeys(SettingInitializer.getGmailTrade());
 		driver.findElement(By.name("login-password")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
 		driver.findElement(By.cssSelector("#login-btn")).click();
-		
+		System.out.println("b-monsterログイン成功");
 		//マイページ表示
 		//最新の1件をダウソ、インサート
 		//#lesson-status > div:nth-child(2)
@@ -200,10 +200,21 @@ public class PointSaveBatch extends AbstractPointController{
 			Lesson beforeLesson = new Lesson();
 			beforeLesson = DbUtil.getBmonLessonDate();
 			
-			//直近と最新のレッスンが同じかの判定
-			if(MatchUtil.isUpdateLesson(beforeLesson,lesson)) {
-				//異なっていたらインサート
+			//初回のみ通るロジック
+			if(beforeLesson == null || lesson != null) {
 				DbUtil.insertBmonData(lesson);
+				System.out.println("レッスンインサート(初回):" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
+			}
+			
+			
+			if(beforeLesson != null || lesson != null) {
+				//直近と最新のレッスンが同じかの判定
+				if(MatchUtil.isUpdateLesson(beforeLesson,lesson)) {
+					//異なっていたらインサート
+					DbUtil.insertBmonData(lesson);
+					System.out.println("レッスンインサート:" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
+					
+				}
 			}
 		}
 		
@@ -212,6 +223,8 @@ public class PointSaveBatch extends AbstractPointController{
 		Point bmonPoint = new Point();
 		bmonPoint.setName("b-monster");
 		bmonPoint.setPoint(String.valueOf(bmonCount));
+		System.out.println("bmonCount:" + String.valueOf(bmonCount));
+
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
 		//jsonList.add(moppyPoint);
