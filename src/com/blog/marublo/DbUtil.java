@@ -125,7 +125,7 @@ public class DbUtil {
 	            Statement statement = (Statement) connection.createStatement();
 	        ) {
 				ResultSet rs =
-						statement.executeQuery("select COUNT(*) from BMON_LESSON ORDER;");
+						statement.executeQuery("select COUNT(*) from BMON_LESSON;");
 				while(rs.next()) {
 					count = rs.getString(1);
 					System.out.println(count.toString());
