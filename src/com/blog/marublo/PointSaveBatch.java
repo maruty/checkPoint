@@ -193,8 +193,8 @@ public class PointSaveBatch extends AbstractPointController{
 			Lesson lesson = new Lesson();
 			lesson.setLessonDate(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr.form-group.latest-reserve > td > strong")).getText());
 			lesson.setLessonTenpo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText());
-			lesson.setLessonTimeFrom(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText());
-			lesson.setLessonTimeTo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText());
+			lesson.setLessonTimeFrom(CalendarUtil.divideFrom(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText()));
+			lesson.setLessonTimeTo(CalendarUtil.divideTo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText()));
 			lesson.setLessonName(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(4) > td > strong")).getText());
 			lesson.setLessonInstructor(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > strong")).getText());
 			lesson.setLessonMashine(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(6) > td > strong")).getText());

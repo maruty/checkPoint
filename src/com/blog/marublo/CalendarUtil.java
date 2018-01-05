@@ -19,12 +19,14 @@ public class CalendarUtil {
 	
 	public static String divideFrom(String str) {
 		//前後の空白削除
-		return null;
+		String[] array = str.split("-");
+		return array[0].trim();
 	}
 	
 	public static String divideTo(String str) {
 		//前後の空白削除
-		return null;
+		String[] array = str.split("-");
+		return array[1].trim();
 	}
 
 }
