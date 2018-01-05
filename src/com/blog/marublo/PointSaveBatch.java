@@ -193,8 +193,8 @@ public class PointSaveBatch extends AbstractPointController{
 			Lesson lesson = new Lesson();
 			lesson.setLessonDate(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr.form-group.latest-reserve > td > strong")).getText());
 			lesson.setLessonTenpo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText());
-			lesson.setLessonTimeFrom(CalendarUtil.divideFrom(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText()));
-			lesson.setLessonTimeTo(CalendarUtil.divideTo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText()));
+			lesson.setLessonTimeFrom(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText());
+			lesson.setLessonTimeTo(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(3) > td > strong")).getText());
 			lesson.setLessonName(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(4) > td > strong")).getText());
 			lesson.setLessonInstructor(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > strong")).getText());
 			lesson.setLessonMashine(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(6) > td > strong")).getText());
@@ -207,11 +207,11 @@ public class PointSaveBatch extends AbstractPointController{
 			beforeLesson = DbUtil.getBmonLessonDate();
 			
 			//初回のみ通るロジック
-			if(beforeLesson == null || lesson != null) {
+			if(beforeLesson == null && lesson != null) {
 				System.out.println("レッスンインサートロジック");
 
 				DbUtil.insertBmonData(lesson);
-				System.out.println("レッスンインサート(初回):" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
+				System.out.println("レッスンインサート(初回):" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor() + lesson.getLessonTimeFrom());
 			}
 			
 			
