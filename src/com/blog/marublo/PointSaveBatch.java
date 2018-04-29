@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -22,6 +23,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import com.blog.marublo.AbstractPointController;
 import com.blog.marublo.CalendarUtil;
@@ -29,7 +31,6 @@ import com.blog.marublo.DbUtil;
 import com.blog.marublo.MatchUtil;
 import com.blog.marublo.Point;
 import com.blog.marublo.SettingInitializer;
-import com.sun.jna.platform.win32.DBT;
 
 public class PointSaveBatch extends AbstractPointController{
 	public PointSaveBatch(){
@@ -37,6 +38,7 @@ public class PointSaveBatch extends AbstractPointController{
 	}
 
 	public void execute() throws InterruptedException{
+		
 
 		String pointTemp ="";
 
@@ -83,6 +85,41 @@ public class PointSaveBatch extends AbstractPointController{
 		}
 		*/
 		//###############################################################################################
+		System.out.println("Moppy");
+		System.out.println("ログイン処理");
+		//ログインフォームからスタート
+		System.out.println("モッピー：ログインフォーム");
+		driver.get("https://ssl.pc.moppy.jp/login/");
+		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
+		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.MOPPY_USERID);
+		driver.findElement(By.name("pass")).sendKeys( SettingInitializer.MOPPY_PASSWORD);
+		
+		driver.findElement(By.cssSelector("#content > section > div > div.box-login > form > div > div.login-btn")).click();
+		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
+		System.out.println("モッピー：ログイン成功");
+		//pointパース
+		
+		List<WebElement>moppyPointList = driver.findElements(By.cssSelector(".odometer-value"));
+		String moppyPoint = "";
+		for(WebElement element : moppyPointList) {
+			moppyPoint = moppyPoint + element.getText();
+		}
+		
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> moppyTheDayBeforeList = DbUtil.selectPointData("moppy");
+		//インサート用データ
+		Point moppy = new Point("moppy", moppyPoint, CalendarUtil.todayUnderNormal());
+		
+		if(moppyTheDayBeforeList != null && moppyTheDayBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			moppy.setYesterday(compareTheDayBefore(moppyTheDayBeforeList.get(0),moppy));
+		}
+		
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(moppy);
+		
+		//###############################################################################################
 
 		System.out.println("モバトクTOP");
 		System.out.println("ログイン処理");
@@ -120,7 +157,10 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.findElement(By.name("loginId")).sendKeys(SettingInitializer.getGmailTrade());
 		driver.findElement(By.name("loginPass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
 		driver.findElement(By.cssSelector("body > div > div > div > div > div.panel-body > form > fieldset > input")).click();
-		String fcPoint = driver.findElement(By.cssSelector("#page-wrapper > div:nth-child(2) > div:nth-child(1) > div > div > div > div.col-xs-9.text-right > div.huge")).getText();
+		
+		driver.manage().timeouts().implicitlyWait(50 ,TimeUnit.SECONDS);
+		
+		String fcPoint = driver.findElement(By.cssSelector(".panel-red > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1)")).getText();
 		Point feelPoint = new Point("FC",fcPoint,CalendarUtil.todayUnderNormal());
 
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
@@ -130,7 +170,9 @@ public class PointSaveBatch extends AbstractPointController{
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
 			feelPoint.setYesterday(compareTheDayBefore(fcTheDayBeforeList.get(0),feelPoint));
 		}
-
+		
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
 		DbUtil.insertPointData(feelPoint);
 		//###############################################################################################
 		/*
@@ -190,6 +232,7 @@ public class PointSaveBatch extends AbstractPointController{
 		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(2) > td > strong
 		Thread.sleep(2000);
 		System.out.println("bmonster：マイページ");
+
 		if(0 < driver.findElements(By.cssSelector("#lesson-status > div:nth-child(2)")).size()) {
 			System.out.println("bmonster：マイページロジック入った");
 			Lesson lesson = new Lesson();
@@ -230,16 +273,32 @@ public class PointSaveBatch extends AbstractPointController{
 			}
 		}
 		
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> bmonTheDayBeforeList = DbUtil.selectPointData("b-monster");
+		
 		//b-monのレッスン数カウント
 		int bmonCount = DbUtil.countBmonLesson();
-		Point bmonPoint = new Point();
-		bmonPoint.setName("b-monster");
-		bmonPoint.setPoint(String.valueOf(bmonCount));
+		//Point bmonPoint = new Point();
+		//bmonPoint.setName("b-monster");
+		//bmonPoint.setPoint(String.valueOf(bmonCount));
 		System.out.println("bmonCount:" + String.valueOf(bmonCount));
+		
+		//インサート用データ
+		Point bmonPoint = new Point("b-monster", String.valueOf(bmonCount), CalendarUtil.todayUnderNormal());
+		
+		if(bmonTheDayBeforeList != null && bmonTheDayBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			bmonPoint.setYesterday(compareTheDayBefore(bmonTheDayBeforeList.get(0),bmonPoint));
+		}
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(bmonPoint);
+
+		System.out.println("json作成");
 
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
-		//jsonList.add(moppyPoint);
+		jsonList.add(moppy);
 		jsonList.add(mobatokuPoint);
 		//jsonList.add(maildepointPoint);
 		//jsonList.add(hapitasuPoint);
@@ -248,8 +307,6 @@ public class PointSaveBatch extends AbstractPointController{
 
 		createJson(jsonList);
 		
-
-
 
 		driver.quit();
 	}

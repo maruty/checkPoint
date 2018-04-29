@@ -16,6 +16,7 @@ public class SettingInitializer{
 	public static String GENDAMA_PASSWORD = getGendamaPass();
 	public static String MOPPY_USERID = getMoppyId();
 	public static String MOPPY_PASSWORD = getMoppyPass();
+	public static String EVN = getEnv();
 
 
 	public static Properties init() {
@@ -30,6 +31,15 @@ public class SettingInitializer{
 			System.exit(0);
 		}
 		return properties;
+	}
+	
+	public static boolean isDebug() {
+		return getEnv().equals("Debug");
+	}
+
+
+	private static String getEnv() {
+		return (properties.getProperty("ENV"));
 	}
 
 

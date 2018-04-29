@@ -8,6 +8,7 @@ public class AbstractPointController implements PointInterface{
 	protected WebDriver driver;
 
 	public AbstractPointController(){
+		
 		driver = new FirefoxDriver();
 	}
 
@@ -16,6 +17,12 @@ public class AbstractPointController implements PointInterface{
 
 
 	}
+	
+	public void quitDriver() {
+		driver.quit();
+	}
+	
+	
 
 
 
