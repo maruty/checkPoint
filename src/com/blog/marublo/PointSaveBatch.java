@@ -132,6 +132,11 @@ public class PointSaveBatch extends AbstractPointController{
 		click();
 		System.out.println("モバトク：ログイン成功");
 
+		if(driver.findElements(By.cssSelector("#color_box_close")).size() > 0) {
+			driver.findElement(By.cssSelector("#color_box_close")).click();
+			System.out.println("モバトク：広告消した");
+		}
+
 		//ポイント表示部をパース
 		pointTemp = driver.findElement(By.cssSelector("#global_header > div > p > em")).getText();
 		List<String> pointList2 = MatchUtil.getPointList(pointTemp,"[0-9]");
