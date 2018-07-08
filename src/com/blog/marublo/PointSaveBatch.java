@@ -37,10 +37,12 @@ public class PointSaveBatch extends AbstractPointController{
 
 		//持株会確認処理
 		System.out.println("持株会処理");
+
 		driver.get("https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do");
-		driver.findElement(By.xpath("//*[@id=\"contents-inner\"]/form/dl[1]/dd[1]/input")).sendKeys(SettingInitializer.MOTIKABU_CODE);
-		driver.findElement(By.xpath("//*[@id=\"contents-inner\"]/form/dl[2]/dd[1]/input")).sendKeys(SettingInitializer.MOTIKABU_ID);
-		driver.findElement(By.xpath("//*[@id=\"tblloginbtn\"]/input")).sendKeys(SettingInitializer.MOTIKABU_PASS);
+		Thread.sleep(3000);
+		driver.findElement(By.cssSelector("#contents-inner > form > dl:nth-child(2) > dd:nth-child(2) > input")).sendKeys(SettingInitializer.MOTIKABU_CODE);
+		driver.findElement(By.cssSelector("#contents-inner > form > dl:nth-child(3) > dd:nth-child(2) > input")).sendKeys(SettingInitializer.MOTIKABU_ID);
+		driver.findElement(By.cssSelector("#tblloginbtn > input")).sendKeys(SettingInitializer.MOTIKABU_PASS);
 		driver.findElement(By.cssSelector("#bt > input[type=\"image\"]")).click();
 
 		//パスワード変更画面を後で変更
