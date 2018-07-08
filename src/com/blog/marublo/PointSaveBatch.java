@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -34,8 +35,262 @@ public class PointSaveBatch extends AbstractPointController{
 	}
 
 	public void execute() throws InterruptedException, IOException{
+		String pointTemp ="";
+		//MoppyController moppyController = new MoppyController();
+
+		//モッピーログイン
+		//moppyController.login(driver);
+
+		//ポイント表示部をパース
+		/*
+		pointTemp = driver.findElement(By.cssSelector("#point_blinking")).getText();
+		List<String> pointList = MatchUtil.getPointList(pointTemp,"[09]");
+		Point moppyPoint = new Point("moppy", MatchUtil.createPoint(pointList), (CalendarUtil.todayUnderNormal()));
+		*/
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		/*
+		List<Point> moppyList = DbUtil.selectPointData("moppy");
+		if(moppyList != null && moppyList.size() > 0){
+			moppyPoint.setYesterday(compareTheDayBefore(moppyList.get(0),moppyPoint));
+		}
+		*/
+		//ポイントをDBに登録
+		/*
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(moppyPoint);
+		*/
+
+		//###############################################################################################
+		//メールdeポイントログイン
+		//maildeLogin(driver);
+		//ポイント取得
+		//String maildepoint = driver.findElement(By.cssSelector("#status > ul > li.point > p > strong")).getText();
+		//maildepoint = MatchUtil.changeBlank(maildepoint);
+
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		//List<Point> maildepointList = DbUtil.selectPointData("maildepoint");
+		//インサート用データ
+		/*
+		Point maildepointPoint = new Point("maildepoint",maildepoint , CalendarUtil.todayUnderNormal());
+		if(maildepointList != null && maildepointList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			maildepointPoint.setYesterday(compareTheDayBefore(maildepointList.get(0),maildepointPoint));
+		}
+		*/
+		//###############################################################################################
+		System.out.println("Moppy");
+		System.out.println("ログイン処理");
+		//ログインフォームからスタート
+		System.out.println("モッピー：ログインフォーム");
+		driver.get("https://ssl.pc.moppy.jp/login/");
+		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
+		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.MOPPY_USERID);
+		driver.findElement(By.name("pass")).sendKeys( SettingInitializer.MOPPY_PASSWORD);
+
+		driver.findElement(By.cssSelector("#content > section > div > div.boxlogin > form > div > div.loginbtn")).click();
+		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
+		System.out.println("モッピー：ログイン成功");
+		//pointパース
+
+		List<WebElement>moppyPointList = driver.findElements(By.cssSelector(".odometervalue"));
+		String moppyPoint = "";
+		for(WebElement element : moppyPointList) {
+			moppyPoint = moppyPoint + element.getText();
+		}
+
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> moppyTheDayBeforeList = DbUtil.selectPointData("moppy");
+		//インサート用データ
+		Point moppy = new Point("moppy", moppyPoint, CalendarUtil.todayUnderNormal());
+
+		if(moppyTheDayBeforeList != null && moppyTheDayBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			moppy.setYesterday(compareTheDayBefore(moppyTheDayBeforeList.get(0),moppy));
+		}
+
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(moppy);
+
+		//###############################################################################################
+
+		System.out.println("モバトクTOP");
+		System.out.println("ログイン処理");
+		driver.get("http://pc.mtoku.jp/");
+		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.getGmailId());
+		driver.findElement(By.name("password")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+
+		//ログインボタン
+		driver.findElement(By.cssSelector("#global_header > div > div > form > fieldset > button")).
+		click();
+		System.out.println("モバトク：ログイン成功");
+
+		if(driver.findElements(By.cssSelector("#color_box_close")).size() > 0) {
+			driver.findElement(By.cssSelector("#color_box_close")).click();
+			System.out.println("モバトク：広告消した");
+		}
+
+		//ポイント表示部をパース
+		pointTemp = driver.findElement(By.cssSelector("#global_header > div > p > em")).getText();
+		List<String> pointList2 = MatchUtil.getPointList(pointTemp,"[09]");
 
 
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> mobatokuTheDayBeforeList = DbUtil.selectPointData("mobatoku");
+		//インサート用データ
+		Point mobatokuPoint = new Point("mobatoku", MatchUtil.createPoint(pointList2), CalendarUtil.todayUnderNormal());
+
+		if(mobatokuTheDayBeforeList != null && mobatokuTheDayBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			mobatokuPoint.setYesterday(compareTheDayBefore(mobatokuTheDayBeforeList.get(0),mobatokuPoint));
+		}
+
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(mobatokuPoint);
+		//###############################################################################################
+
+		System.out.println("FCレッスン数確認");
+		driver.get("http://133.242.235.62/workspace/");
+		driver.findElement(By.name("loginId")).sendKeys(SettingInitializer.getGmailTrade());
+		driver.findElement(By.name("loginPass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.findElement(By.cssSelector("body > div > div > div > div > div.panelbody > form > fieldset > input")).click();
+
+		driver.manage().timeouts().implicitlyWait(50 ,TimeUnit.SECONDS);
+
+		String fcPoint = driver.findElement(By.cssSelector(".panelred > div:nthchild(1) > div:nthchild(1) > div:nthchild(2) > div:nthchild(1)")).getText();
+		Point feelPoint = new Point("FC",fcPoint,CalendarUtil.todayUnderNormal());
+
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> fcTheDayBeforeList = DbUtil.selectPointData("FC");
+
+		if(fcTheDayBeforeList != null && fcTheDayBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			feelPoint.setYesterday(compareTheDayBefore(fcTheDayBeforeList.get(0),feelPoint));
+		}
+
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(feelPoint);
+		//###############################################################################################
+		/*
+		System.out.println("ハピトクポイント確認");
+
+		driver.get("http://hapitas.jp/");
+		driver.get("http://hapitas.jp/auth/signin/");
+
+		System.out.println("ハピタス：ログインフォーム");
+		driver.findElement(By.cssSelector("#email_main")).sendKeys(SettingInitializer.getGmailId());
+		driver.findElement(By.cssSelector("#password_main")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.findElement(By.cssSelector("#login_keep_main")).click();
+		driver.findElement(By.cssSelector("#post_review > div > p.mb10.pt5 > input")).click();
+
+		String hapipoint = driver.findElement(By.cssSelector("#globalnavigation > div > ul.usernavi > li.usernavili.usernavistatus > a.usernavipoint")).getText();
+
+		Point hapitasuPoint = new Point("hapitasu",hapipoint,CalendarUtil.todayUnderNormal());
+		*/
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		/*
+		List<Point> hapitasBeforeList = DbUtil.selectPointData("hapitasu");
+
+		if(hapitasBeforeList != null && hapitasBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			//hapitasuPoint.setYesterday(compareTheDayBefore(hapitasBeforeList.get(0),hapitasuPoint));
+		}
+		DbUtil.insertPointData(hapitasuPoint);
+		*/
+		//###############################################################################################
+
+
+		//2018/1/5 bmonsterのレッスン情報を新たにインサートする
+		System.out.println("bmonsterレッスン数取得");
+		driver.get("https://www.bmonster.jp/");
+		//#gconsole > li:nthchild(1) > button
+		driver.findElement(By.cssSelector("#gconsole > li:nthchild(1) > button")).click();
+		driver.findElement(By.name("loginusername")).sendKeys(SettingInitializer.getGmailTrade());
+		driver.findElement(By.name("loginpassword")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.findElement(By.cssSelector("#loginbtn")).click();
+		System.out.println("bmonsterログイン成功");
+		//マイページ表示
+		//最新の1件をダウソ、インサート
+		//#lessonstatus > div:nthchild(2)
+		//日付
+		//#lessonstatus > div:nthchild(2) > table > tbody > tr.formgroup.latestreserve > td > strong
+		//会場
+		//#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(2) > td > strong
+		//時間
+		//#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(3) > td > strong
+		//レッスン名
+		//#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(4) > td > strong
+		//パフォーマー
+		//#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(5) > td > strong
+		//サンドバック
+		//#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(6) > td > strong
+
+		//#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(2) > td > strong
+		Thread.sleep(2000);
+		System.out.println("bmonster：マイページ");
+
+		if(0 < driver.findElements(By.cssSelector("#lessonstatus > div:nthchild(2)")).size()) {
+			System.out.println("bmonster：マイページロジック入った");
+			Lesson lesson = new Lesson();
+			lesson.setLessonDate(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr.formgroup.latestreserve > td > strong")).getText());
+			lesson.setLessonTenpo(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(2) > td > strong")).getText());
+			lesson.setLessonTimeFrom(CalendarUtil.divideFrom(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(3) > td > strong")).getText()));
+			lesson.setLessonTimeTo(CalendarUtil.divideTo(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(3) > td > strong")).getText()));
+			lesson.setLessonName(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(4) > td > strong")).getText());
+			lesson.setLessonInstructor(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(5) > td > strong")).getText());
+			lesson.setLessonMashine(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(6) > td > strong")).getText());
+
+			System.out.println("レッスン詳細:" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
+
+
+
+			Lesson beforeLesson = new Lesson();
+			beforeLesson = DbUtil.getBmonLessonDate();
+
+			//初回のみ通るロジック
+			if(beforeLesson == null && lesson != null) {
+				System.out.println("レッスンインサートロジック");
+
+				DbUtil.insertBmonData(lesson);
+				System.out.println("レッスンインサート(初回):" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor() + lesson.getLessonTimeFrom());
+			}
+
+
+			if(beforeLesson != null || lesson != null) {
+				System.out.println("レッスン2回目ロジック");
+
+				//直近と最新のレッスンが同じかの判定
+				if(MatchUtil.isUpdateLesson(beforeLesson,lesson)) {
+					//異なっていたらインサート
+					DbUtil.insertBmonData(lesson);
+					System.out.println("レッスンインサート:" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
+
+				}
+			}
+		}
+
+		//前日と今日の比較をするためコンペアを行うためデータ抽出
+		List<Point> bmonTheDayBeforeList = DbUtil.selectPointData("bmonster");
+
+		//bmonのレッスン数カウント
+		int bmonCount = DbUtil.countBmonLesson();
+		//Point bmonPoint = new Point();
+		//bmonPoint.setName("bmonster");
+		//bmonPoint.setPoint(String.valueOf(bmonCount));
+		System.out.println("bmonCount:" + String.valueOf(bmonCount));
+
+		//インサート用データ
+		Point bmonPoint = new Point("bmonster", String.valueOf(bmonCount), CalendarUtil.todayUnderNormal());
+
+		if(bmonTheDayBeforeList != null && bmonTheDayBeforeList.size() > 0){
+			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
+			bmonPoint.setYesterday(compareTheDayBefore(bmonTheDayBeforeList.get(0),bmonPoint));
+		}
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(bmonPoint);
 
 
 		//持株会確認処理
@@ -100,12 +355,12 @@ public class PointSaveBatch extends AbstractPointController{
 
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
-		//jsonList.add(moppy);
-		//jsonList.add(mobatokuPoint);
+		jsonList.add(moppy);
+		jsonList.add(mobatokuPoint);
 		//jsonList.add(maildepointPoint);
 		//jsonList.add(hapitasuPoint);
-		//jsonList.add(feelPoint);
-		//jsonList.add(bmonPoint);
+		jsonList.add(feelPoint);
+		jsonList.add(bmonPoint);
 		jsonList.add(kabu);
 
 		createJson(jsonList);
