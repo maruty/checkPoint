@@ -4,6 +4,7 @@ package com.blog.marublo;
 
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,7 +21,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 public class PointSaveBatch extends AbstractPointController{
@@ -28,7 +32,7 @@ public class PointSaveBatch extends AbstractPointController{
 		super();
 	}
 
-	public void execute() throws InterruptedException{
+	public void execute() throws InterruptedException, IOException{
 
 
 
@@ -36,6 +40,7 @@ public class PointSaveBatch extends AbstractPointController{
 		//持株会確認処理
 		System.out.println("持株会処理");
 		driver.get("https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do");
+		PointSaveBatch.getCapture(driver,"kabu");
 		Thread.sleep(3000);
 		driver.findElement(By.cssSelector("#contents-inner > form > dl:nth-child(2) > dd:nth-child(2) > input")).sendKeys(SettingInitializer.MOTIKABU_CODE);
 		driver.findElement(By.cssSelector("#contents-inner > form > dl:nth-child(3) > dd:nth-child(2) > input")).sendKeys(SettingInitializer.MOTIKABU_ID);
@@ -137,6 +142,17 @@ public class PointSaveBatch extends AbstractPointController{
 
 
 	}
+
+	public static void getCapture(WebDriver driver,String site) throws IOException{
+		File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+			String fileName = site + "_"  + ".png";
+			String rootPath = "/var/www/html/log_images/";
+			String URL = "http://133.242.235.62";
+			FileUtils.copyFile(srcFile, new File(rootPath + fileName));
+			System.out.println("file:" + "  " + URL + "/log_images/" + fileName);
+	}
+
+
 	private static void sendmail(List<Point> pointList) {
 		 final String to = "yanagisawa.trade@gmail.com";
 		    final String from = SettingInitializer.getGmailId();

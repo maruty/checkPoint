@@ -1,8 +1,9 @@
 package com.blog.marublo;
 
+import java.io.IOException;
 
 public class ExecPointController  {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
     	System.out.println("===自動ポイント取得処理開始===");
     	String geckoDriverPath = "";
@@ -17,7 +18,7 @@ public class ExecPointController  {
 
     	AbstractPointController driver = new PointSaveBatch();
     	driver.execute();
-    driver.quitDriver();	
+    driver.quitDriver();
 
     	//終了処理
     System.out.println("処理が終了しました");
