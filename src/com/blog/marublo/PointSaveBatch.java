@@ -52,6 +52,9 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.findElement(By.cssSelector("#bt > input[type=\"image\"]")).click();
 
 		//パスワード変更画面を後で変更
+		fr = driver.findElement(By.name("LEFT"));
+		driver.switchTo().frame(fr);
+		PointSaveBatch.getCapture(driver,"kabu");
 		driver.findElement(By.cssSelector("#line > a > img")).click();
 		//メイン
 		//#C
