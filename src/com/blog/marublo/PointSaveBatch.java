@@ -25,20 +25,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.blog.marublo.AbstractPointController;
-import com.blog.marublo.CalendarUtil;
-import com.blog.marublo.DbUtil;
-import com.blog.marublo.MatchUtil;
-import com.blog.marublo.Point;
-import com.blog.marublo.SettingInitializer;
-
 public class PointSaveBatch extends AbstractPointController{
 	public PointSaveBatch(){
 		super();
 	}
 
 	public void execute() throws InterruptedException{
-		
+
 
 		String pointTemp ="";
 
@@ -93,32 +86,32 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
 		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.MOPPY_USERID);
 		driver.findElement(By.name("pass")).sendKeys( SettingInitializer.MOPPY_PASSWORD);
-		
+
 		driver.findElement(By.cssSelector("#content > section > div > div.box-login > form > div > div.login-btn")).click();
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
 		System.out.println("モッピー：ログイン成功");
 		//pointパース
-		
+
 		List<WebElement>moppyPointList = driver.findElements(By.cssSelector(".odometer-value"));
 		String moppyPoint = "";
 		for(WebElement element : moppyPointList) {
 			moppyPoint = moppyPoint + element.getText();
 		}
-		
+
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> moppyTheDayBeforeList = DbUtil.selectPointData("moppy");
 		//インサート用データ
 		Point moppy = new Point("moppy", moppyPoint, CalendarUtil.todayUnderNormal());
-		
+
 		if(moppyTheDayBeforeList != null && moppyTheDayBeforeList.size() > 0){
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
 			moppy.setYesterday(compareTheDayBefore(moppyTheDayBeforeList.get(0),moppy));
 		}
-		
+
 		//ポイントをDBに登録
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(moppy);
-		
+
 		//###############################################################################################
 
 		System.out.println("モバトクTOP");
@@ -162,9 +155,9 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.findElement(By.name("loginId")).sendKeys(SettingInitializer.getGmailTrade());
 		driver.findElement(By.name("loginPass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
 		driver.findElement(By.cssSelector("body > div > div > div > div > div.panel-body > form > fieldset > input")).click();
-		
+
 		driver.manage().timeouts().implicitlyWait(50 ,TimeUnit.SECONDS);
-		
+
 		String fcPoint = driver.findElement(By.cssSelector(".panel-red > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1)")).getText();
 		Point feelPoint = new Point("FC",fcPoint,CalendarUtil.todayUnderNormal());
 
@@ -175,7 +168,7 @@ public class PointSaveBatch extends AbstractPointController{
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
 			feelPoint.setYesterday(compareTheDayBefore(fcTheDayBeforeList.get(0),feelPoint));
 		}
-		
+
 		//ポイントをDBに登録
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(feelPoint);
@@ -207,8 +200,8 @@ public class PointSaveBatch extends AbstractPointController{
 		DbUtil.insertPointData(hapitasuPoint);
 		*/
 		//###############################################################################################
-		
-		
+
+
 		//2018/1/5 b-monsterのレッスン情報を新たにインサートする
 		System.out.println("b-monsterレッスン数取得");
 		driver.get("https://www.b-monster.jp/");
@@ -233,7 +226,7 @@ public class PointSaveBatch extends AbstractPointController{
 		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > strong
 		//サンドバック
 		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(6) > td > strong
-		
+
 		//#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(2) > td > strong
 		Thread.sleep(2000);
 		System.out.println("bmonster：マイページ");
@@ -248,14 +241,14 @@ public class PointSaveBatch extends AbstractPointController{
 			lesson.setLessonName(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(4) > td > strong")).getText());
 			lesson.setLessonInstructor(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > strong")).getText());
 			lesson.setLessonMashine(driver.findElement(By.cssSelector("#lesson-status > div:nth-child(2) > table > tbody > tr:nth-child(6) > td > strong")).getText());
-			
+
 			System.out.println("レッスン詳細:" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
-			
-			
-			
+
+
+
 			Lesson beforeLesson = new Lesson();
 			beforeLesson = DbUtil.getBmonLessonDate();
-			
+
 			//初回のみ通るロジック
 			if(beforeLesson == null && lesson != null) {
 				System.out.println("レッスンインサートロジック");
@@ -263,8 +256,8 @@ public class PointSaveBatch extends AbstractPointController{
 				DbUtil.insertBmonData(lesson);
 				System.out.println("レッスンインサート(初回):" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor() + lesson.getLessonTimeFrom());
 			}
-			
-			
+
+
 			if(beforeLesson != null || lesson != null) {
 				System.out.println("レッスン2回目ロジック");
 
@@ -273,24 +266,24 @@ public class PointSaveBatch extends AbstractPointController{
 					//異なっていたらインサート
 					DbUtil.insertBmonData(lesson);
 					System.out.println("レッスンインサート:" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
-					
+
 				}
 			}
 		}
-		
+
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> bmonTheDayBeforeList = DbUtil.selectPointData("b-monster");
-		
+
 		//b-monのレッスン数カウント
 		int bmonCount = DbUtil.countBmonLesson();
 		//Point bmonPoint = new Point();
 		//bmonPoint.setName("b-monster");
 		//bmonPoint.setPoint(String.valueOf(bmonCount));
 		System.out.println("bmonCount:" + String.valueOf(bmonCount));
-		
+
 		//インサート用データ
 		Point bmonPoint = new Point("b-monster", String.valueOf(bmonCount), CalendarUtil.todayUnderNormal());
-		
+
 		if(bmonTheDayBeforeList != null && bmonTheDayBeforeList.size() > 0){
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
 			bmonPoint.setYesterday(compareTheDayBefore(bmonTheDayBeforeList.get(0),bmonPoint));
@@ -298,6 +291,36 @@ public class PointSaveBatch extends AbstractPointController{
 		//ポイントをDBに登録
 		System.out.println("DBインサート");
 		DbUtil.insertPointData(bmonPoint);
+
+		//持株会確認処理
+		System.out.println("持株会処理");
+		driver.get("https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do");
+		driver.findElement(By.name("kiLoginInDTO.motikabuCd")).sendKeys(SettingInitializer.MOTIKABU_CODE);
+		driver.findElement(By.name("kiLoginInDTO.compositeKaiinCd")).sendKeys(SettingInitializer.MOTIKABU_ID);
+		driver.findElement(By.name("kiLoginInDTO.password")).sendKeys(SettingInitializer.MOTIKABU_PASS);
+		driver.findElement(By.cssSelector("#bt > input[type=\"image\"]")).click();
+
+		//パスワード変更画面を後で変更
+		driver.findElement(By.cssSelector("#line > a > img")).click();
+		//メイン
+		//#C
+		driver.findElement(By.cssSelector("#C")).click();
+		driver.findElement(By.cssSelector("#content > ol > li:nth-child(2) > a"));
+
+
+		//株除去(小数点.）
+		String kabusu[] = driver.findElement(By.cssSelector("#content > table.tblbasic > tbody > tr:nth-child(4) > td")).getText().split(".");
+		//,までをいったん取得
+		String kakaku[] = driver.findElement(By.cssSelector("#content > table.tblbasic > tbody > tr:nth-child(7) > td")).getText().split(",");
+		String kakakuMaster = kakaku[0] + kakaku[1].substring(1, 3);
+
+		int goukeiKingaku = Integer.parseInt(kabusu[0]) * Integer.parseInt(kakakuMaster);
+
+		//インサート用データ
+		Point kabu = new Point("R-kabu", String.valueOf(goukeiKingaku) , CalendarUtil.todayUnderNormal());
+		//ポイントをDBに登録
+		System.out.println("DBインサート");
+		DbUtil.insertPointData(kabu);
 
 		System.out.println("json作成");
 
@@ -309,9 +332,10 @@ public class PointSaveBatch extends AbstractPointController{
 		//jsonList.add(hapitasuPoint);
 		jsonList.add(feelPoint);
 		jsonList.add(bmonPoint);
+		jsonList.add(kabu);
 
 		createJson(jsonList);
-		
+
 
 		driver.quit();
 	}

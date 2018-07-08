@@ -1,7 +1,6 @@
 package com.blog.marublo;
 
 import java.io.BufferedInputStream;
-
 import java.io.FileInputStream;
 import java.util.Properties;
 /*
@@ -16,6 +15,10 @@ public class SettingInitializer{
 	public static String GENDAMA_PASSWORD = getGendamaPass();
 	public static String MOPPY_USERID = getMoppyId();
 	public static String MOPPY_PASSWORD = getMoppyPass();
+	public static String MOTIKABU_CODE = motikabuCode();
+	public static String MOTIKABU_ID = motikabuId();
+	public static String MOTIKABU_PASS = motikabuPass();
+
 	public static String EVN = getEnv();
 
 
@@ -32,7 +35,7 @@ public class SettingInitializer{
 		}
 		return properties;
 	}
-	
+
 	public static boolean isDebug() {
 		return getEnv().equals("Debug");
 	}
@@ -78,9 +81,20 @@ public class SettingInitializer{
 	public static String getMySQLUser(){
 		return (properties.getProperty("MY_SQL_USER"));
 	}
-
 	public static String getMySQLPass(){
 		return (properties.getProperty("MY_SQL_PASS"));
+	}
+
+	public static String motikabuCode(){
+		return (properties.getProperty("MOTIKABU_CODE"));
+	}
+
+	public static String motikabuId(){
+		return (properties.getProperty("MOTIKABU_ID"));
+	}
+
+	public static String motikabuPass(){
+		return (properties.getProperty("MOTIKABU_PASS"));
 	}
 
 }
