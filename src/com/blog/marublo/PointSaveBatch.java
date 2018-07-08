@@ -59,6 +59,13 @@ public class PointSaveBatch extends AbstractPointController{
 		PointSaveBatch.getCapture(driver,"kabu");
 		driver.findElement(By.cssSelector("#line > a > img")).click();
 		//メイン
+		driver.switchTo().defaultContent();
+		WebElement fr3 = driver.findElement(By.name("LEFT"));
+		driver.switchTo().frame(fr3);
+
+		PointSaveBatch.getCapture(driver,"kabu");
+
+
 		//#C
 		driver.findElement(By.cssSelector("#C")).click();
 		driver.findElement(By.cssSelector("#content > ol > li:nth-child(2) > a"));
