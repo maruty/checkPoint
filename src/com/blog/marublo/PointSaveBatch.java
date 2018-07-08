@@ -80,7 +80,8 @@ public class PointSaveBatch extends AbstractPointController{
 		//株除去(小数点.）
 
 		//#content > table.tblbasic > tbody > tr:nth-child(4) > td
-		String kabusu[] = driver.findElement(By.cssSelector("#content > table.tblbasic > tbody > tr:nth-child(4) > td")).getText().split(".");
+		System.out.println(driver.findElement(By.xpath("//*[@id=\"content\"]/table[2]/tbody/tr[4]/td")).getText());
+		String kabusu[] = driver.findElement(By.xpath("//*[@id=\"content\"]/table[2]/tbody/tr[4]/td")).getText().split(".");
 		//,までをいったん取得
 		String kakaku[] = driver.findElement(By.cssSelector("#content > table.tblbasic > tbody > tr:nth-child(7) > td")).getText().split(",");
 		String kakakuMaster = kakaku[0] + kakaku[1].substring(1, 3);
