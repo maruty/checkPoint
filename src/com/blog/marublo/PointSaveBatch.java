@@ -31,13 +31,10 @@ public class PointSaveBatch extends AbstractPointController{
 	public void execute() throws InterruptedException{
 
 
-		String pointTemp ="";
-
 
 
 		//持株会確認処理
 		System.out.println("持株会処理");
-
 		driver.get("https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do");
 		Thread.sleep(3000);
 		driver.findElement(By.cssSelector("#contents-inner > form > dl:nth-child(2) > dd:nth-child(2) > input")).sendKeys(SettingInitializer.MOTIKABU_CODE);
@@ -71,7 +68,12 @@ public class PointSaveBatch extends AbstractPointController{
 
 		//jsonファイルを作成する
 		List<Point> jsonList = new ArrayList<>();
-
+		//jsonList.add(moppy);
+		//jsonList.add(mobatokuPoint);
+		//jsonList.add(maildepointPoint);
+		//jsonList.add(hapitasuPoint);
+		//jsonList.add(feelPoint);
+		//jsonList.add(bmonPoint);
 		jsonList.add(kabu);
 
 		createJson(jsonList);
