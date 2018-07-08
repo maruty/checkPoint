@@ -85,7 +85,7 @@ public class PointSaveBatch extends AbstractPointController{
 		//,までをいったん取得
 		System.out.println( driver.findElement(By.xpath("//*[@id=\"content\"]/table[2]/tbody/tr[7]/td")).getText());
 		String kakaku[] = driver.findElement(By.xpath("//*[@id=\"content\"]/table[2]/tbody/tr[7]/td")).getText().split(",");
-		String kakakuMaster = kakaku[0] + kakaku[1].substring(1, 3);
+		String kakakuMaster = kakaku[0] + kakaku[1].substring(0, 3);
 
 		int goukeiKingaku = Integer.parseInt(kabusu[0]) * Integer.parseInt(kakakuMaster);
 		System.out.println("株数:" + kabusu[0] + " 取得平均単価：" + kakakuMaster + " 合計金額：" + goukeiKingaku );
