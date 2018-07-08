@@ -53,6 +53,7 @@ public class PointSaveBatch extends AbstractPointController{
 
 		//パスワード変更画面を後で変更
 		Thread.sleep(3000);
+		driver.switchTo().defaultContent();
 		WebElement fr2 = driver.findElement(By.name("LEFT"));
 		driver.switchTo().frame(fr2);
 		PointSaveBatch.getCapture(driver,"kabu");
