@@ -66,17 +66,23 @@ public class PointSaveBatch extends AbstractPointController{
 		PointSaveBatch.getCapture(driver,"kabu");
 
 		driver.get("https://mochikabukai.mizuho-sc.com/kai/KiSyokMenu.do");
-		//#content > ol > li:nth-child(2) > a
-		driver.findElement(By.cssSelector("#content > ol > li:nth-child(2) > a"));
 
+		//#content > ol > li:nth-child(2) > a
+		driver.findElement(By.cssSelector("#content > ol > li:nth-child(2) > a")).click();
+
+		PointSaveBatch.getCapture(driver,"kabu");
+
+		Thread.sleep(3000);
 
 		//株除去(小数点.）
+		//#content > table.tblbasic > tbody > tr:nth-child(4) > td
 		String kabusu[] = driver.findElement(By.cssSelector("#content > table.tblbasic > tbody > tr:nth-child(4) > td")).getText().split(".");
 		//,までをいったん取得
 		String kakaku[] = driver.findElement(By.cssSelector("#content > table.tblbasic > tbody > tr:nth-child(7) > td")).getText().split(",");
 		String kakakuMaster = kakaku[0] + kakaku[1].substring(1, 3);
 
 		int goukeiKingaku = Integer.parseInt(kabusu[0]) * Integer.parseInt(kakakuMaster);
+		System.out.println("株数:" + kabusu[0] + " 取得平均単価：" + kakakuMaster + " 合計金額：" + goukeiKingaku );
 		System.out.println("株数:" + kabusu[0] + " 取得平均単価：" + kakakuMaster + " 合計金額：" + goukeiKingaku );
 		//インサート用データ
 		Point kabu = new Point("R-kabu", String.valueOf(goukeiKingaku) , CalendarUtil.todayUnderNormal());
