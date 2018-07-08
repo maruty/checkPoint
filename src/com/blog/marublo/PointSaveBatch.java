@@ -65,7 +65,6 @@ public class PointSaveBatch extends AbstractPointController{
 
 		PointSaveBatch.getCapture(driver,"kabu");
 
-
 		//#C
 		driver.findElement(By.cssSelector("#C")).click();
 		driver.findElement(By.cssSelector("#content > ol > li:nth-child(2) > a"));
@@ -78,7 +77,7 @@ public class PointSaveBatch extends AbstractPointController{
 		String kakakuMaster = kakaku[0] + kakaku[1].substring(1, 3);
 
 		int goukeiKingaku = Integer.parseInt(kabusu[0]) * Integer.parseInt(kakakuMaster);
-
+		System.out.println("株数:" + kabusu[0] + " 取得平均単価：" + kakakuMaster + " 合計金額：" + goukeiKingaku );
 		//インサート用データ
 		Point kabu = new Point("R-kabu", String.valueOf(goukeiKingaku) , CalendarUtil.todayUnderNormal());
 		//ポイントをDBに登録
