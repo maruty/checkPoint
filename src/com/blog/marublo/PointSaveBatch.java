@@ -26,6 +26,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class PointSaveBatch extends AbstractPointController{
 	public PointSaveBatch(){
@@ -42,6 +43,9 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.get("https://mochikabukai.mizuho-sc.com/kai/KiLoginPre.do");
 		PointSaveBatch.getCapture(driver,"kabu");
 		Thread.sleep(3000);
+		WebElement fr = driver.findElement(By.name("LEFT"));
+		driver.switchTo().frame(fr);
+
 		driver.findElement(By.cssSelector("#contents-inner > form > dl:nth-child(2) > dd:nth-child(2) > input")).sendKeys(SettingInitializer.MOTIKABU_CODE);
 		driver.findElement(By.cssSelector("#contents-inner > form > dl:nth-child(3) > dd:nth-child(2) > input")).sendKeys(SettingInitializer.MOTIKABU_ID);
 		driver.findElement(By.cssSelector("#tblloginbtn > input")).sendKeys(SettingInitializer.MOTIKABU_PASS);
