@@ -72,9 +72,13 @@ public class PointSaveBatch extends AbstractPointController{
 
 		PointSaveBatch.getCapture(driver,"kabu");
 
-		Thread.sleep(3000);
+		Thread.sleep(4000);
+
+
+		PointSaveBatch.getCapture(driver,"kabu");
 
 		//株除去(小数点.）
+
 		//#content > table.tblbasic > tbody > tr:nth-child(4) > td
 		String kabusu[] = driver.findElement(By.cssSelector("#content > table.tblbasic > tbody > tr:nth-child(4) > td")).getText().split(".");
 		//,までをいったん取得
