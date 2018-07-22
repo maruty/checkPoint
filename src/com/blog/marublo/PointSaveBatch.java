@@ -82,12 +82,13 @@ public class PointSaveBatch extends AbstractPointController{
 		System.out.println("ログイン処理");
 		//ログインフォームからスタート
 		System.out.println("モッピー：ログインフォーム");
+		//#content > section > div > div.box-login > form > div > div.login-btn > button
 		driver.get("https://ssl.pc.moppy.jp/login/");
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
 		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.MOPPY_USERID);
 		driver.findElement(By.name("pass")).sendKeys( SettingInitializer.MOPPY_PASSWORD);
-
-		driver.findElement(By.cssSelector("#content > section > div > div.boxlogin > form > div > div.loginbtn")).click();
+		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
+		driver.findElement(By.cssSelector("#content > section > div > div.box-login > form > div > div.login-btn > button")).click();
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
 		System.out.println("モッピー：ログイン成功");
 		//pointパース
