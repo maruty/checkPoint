@@ -236,7 +236,8 @@ public class PointSaveBatch extends AbstractPointController{
 		System.out.println("bmonsterレッスン数取得");
 		driver.get("https://www.b-monster.jp/");
 		//#gconsole > li:nthchild(1) > button
-		driver.findElement(By.cssSelector("#gconsole > li:nthchild(1) > button")).click();
+		//button.btn
+		driver.findElement(By.cssSelector(".button.btn")).click();
 		driver.findElement(By.name("loginusername")).sendKeys(SettingInitializer.getGmailTrade());
 		driver.findElement(By.name("loginpassword")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
 		driver.findElement(By.cssSelector("#loginbtn")).click();
