@@ -147,7 +147,7 @@ public class PointSaveBatch extends AbstractPointController{
 		pointTemp = driver.findElement(By.cssSelector(".header__userinfo > em:nth-child(2)")).getText();
 		System.out.println("モバトク：" + pointTemp);
 		//replaceAll("[^0-9]","")
-		List<String> pointList2 = MatchUtil.getPointList(pointTemp,"[^0-9]");
+		List<String> pointList2 = MatchUtil.getPointList(pointTemp,"/[^0-9]/");
 
 		System.out.println("モバトク、パース：" + pointList2.get(0));
 
