@@ -92,6 +92,8 @@ public class PointSaveBatch extends AbstractPointController{
 		//
 		driver.findElement(By.cssSelector(".a-btn__login")).click();
 		driver.manage().timeouts().implicitlyWait(10 ,TimeUnit.SECONDS);
+		Thread.sleep(4000);
+
 		System.out.println("モッピー：ログイン成功");
 		//pointパース
 		//driver.navigate().refresh();
