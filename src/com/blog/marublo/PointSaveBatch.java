@@ -143,13 +143,19 @@ public class PointSaveBatch extends AbstractPointController{
 		//#global_header > div > p > em
 		//.header__userinfo > em:nth-child(2)
 		pointTemp = driver.findElement(By.cssSelector(".header__userinfo > em:nth-child(2)")).getText();
+		System.out.println("モバトク：" + pointTemp);
+
 		List<String> pointList2 = MatchUtil.getPointList(pointTemp,"[09]");
+
+		System.out.println("モバトク、パース：" + pointList2.get(0));
 
 
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> mobatokuTheDayBeforeList = DbUtil.selectPointData("mobatoku");
 		//インサート用データ
 		Point mobatokuPoint = new Point("mobatoku", MatchUtil.createPoint(pointList2), CalendarUtil.todayUnderNormal());
+
+
 
 		if(mobatokuTheDayBeforeList != null && mobatokuTheDayBeforeList.size() > 0){
 			//コンペアしたデータをyesterdayにいれる(DBインサートには影響なし）
