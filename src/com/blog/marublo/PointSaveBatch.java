@@ -95,6 +95,7 @@ public class PointSaveBatch extends AbstractPointController{
 		System.out.println("モッピー：ログイン成功");
 		//pointパース
 		driver.manage().timeouts().implicitlyWait(5 ,TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
 
 		List<WebElement>moppyPointList = driver.findElements(By.cssSelector(".odometer"));
 		String moppyPoint = "";
