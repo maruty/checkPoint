@@ -88,7 +88,7 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.findElement(By.name("mail")).sendKeys(SettingInitializer.MOPPY_USERID);
 		driver.findElement(By.name("pass")).sendKeys( SettingInitializer.MOPPY_PASSWORD);
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
-		PointSaveBatch.getCapture(driver,"moppy");
+
 		//
 		driver.findElement(By.cssSelector(".a-btn__login")).click();
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
@@ -104,6 +104,7 @@ public class PointSaveBatch extends AbstractPointController{
 
 
 		System.out.println("moppyPoint:"+ moppyPoint );
+		PointSaveBatch.getCapture(driver,"moppy");
 
 		moppyPoint = moppyPoint.replaceAll("[\\r\\n]+", "");
 
