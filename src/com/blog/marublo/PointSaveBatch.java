@@ -380,6 +380,14 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.findElement(By.name("pass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
 		//driver.findElement(By.name("autologin")).click();
 		//
+
+		try {
+			PointSaveBatch.getCapture(driver,"moppy");
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+
 		driver.findElement(By.cssSelector("#content > section > div > div.box-login > form > div > div.m-btn-form__item.ga-login-btn > button")).
 		click();
 		System.out.println("モッピー：ログイン成功");
