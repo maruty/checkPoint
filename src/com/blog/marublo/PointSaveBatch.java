@@ -186,8 +186,9 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.findElement(By.cssSelector(".btn")).click();
 
 		driver.manage().timeouts().implicitlyWait(50 ,TimeUnit.SECONDS);
+		Thread.sleep(3000);
 
-		String fcPoint = driver.findElement(By.cssSelector(".panelred > div:nthchild(1) > div:nthchild(1) > div:nthchild(2) > div:nthchild(1)")).getText();
+		String fcPoint = driver.findElement(By.cssSelector(".panel-red > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1)")).getText();
 		Point feelPoint = new Point("FC",fcPoint,CalendarUtil.todayUnderNormal());
 
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
