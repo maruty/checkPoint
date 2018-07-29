@@ -180,7 +180,7 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.get("http://133.242.235.62/workspace/");
 		driver.findElement(By.name("loginId")).sendKeys(SettingInitializer.getGmailTrade());
 		driver.findElement(By.name("loginPass")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
-		driver.findElement(By.cssSelector("body > div > div > div > div > div.panelbody > form > fieldset > input")).click();
+		driver.findElement(By.cssSelector(".submit_b > input:nth-child(1)")).click();
 
 		driver.manage().timeouts().implicitlyWait(50 ,TimeUnit.SECONDS);
 
