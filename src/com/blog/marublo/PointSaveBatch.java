@@ -101,6 +101,8 @@ public class PointSaveBatch extends AbstractPointController{
 			moppyPoint = moppyPoint + element.getText();
 		}
 
+		System.out.println("moppyPoint:"+ moppyPoint );
+
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> moppyTheDayBeforeList = DbUtil.selectPointData("moppy");
 		//インサート用データ
