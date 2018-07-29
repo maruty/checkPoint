@@ -140,7 +140,9 @@ public class PointSaveBatch extends AbstractPointController{
 		}
 
 		//ポイント表示部をパース
-		pointTemp = driver.findElement(By.cssSelector("#global_header > div > p > em")).getText();
+		//#global_header > div > p > em
+		//.header__userinfo > em:nth-child(2)
+		pointTemp = driver.findElement(By.cssSelector(".header__userinfo > em:nth-child(2)")).getText();
 		List<String> pointList2 = MatchUtil.getPointList(pointTemp,"[09]");
 
 
