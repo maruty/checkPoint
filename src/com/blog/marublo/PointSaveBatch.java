@@ -234,7 +234,7 @@ public class PointSaveBatch extends AbstractPointController{
 
 		//2018/1/5 bmonsterのレッスン情報を新たにインサートする
 		System.out.println("bmonsterレッスン数取得");
-		driver.get("https://www.bmonster.jp/");
+		driver.get("https://www.b-monster.jp/");
 		//#gconsole > li:nthchild(1) > button
 		driver.findElement(By.cssSelector("#gconsole > li:nthchild(1) > button")).click();
 		driver.findElement(By.name("loginusername")).sendKeys(SettingInitializer.getGmailTrade());
