@@ -281,13 +281,14 @@ public class PointSaveBatch extends AbstractPointController{
 		if(0 < driver.findElements(By.cssSelector("#lessonstatus > div:nthchild(2)")).size()) {
 			System.out.println("bmonster：マイページロジック入った");
 			Lesson lesson = new Lesson();
-			lesson.setLessonDate(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr.formgroup.latestreserve > td > strong")).getText());
-			lesson.setLessonTenpo(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(2) > td > strong")).getText());
-			lesson.setLessonTimeFrom(CalendarUtil.divideFrom(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(3) > td > strong")).getText()));
-			lesson.setLessonTimeTo(CalendarUtil.divideTo(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(3) > td > strong")).getText()));
-			lesson.setLessonName(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(4) > td > strong")).getText());
-			lesson.setLessonInstructor(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(5) > td > strong")).getText());
-			lesson.setLessonMashine(driver.findElement(By.cssSelector("#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(6) > td > strong")).getText());
+			//div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > strong:nth-child(1)
+			lesson.setLessonDate(driver.findElement(By.cssSelector("div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > strong:nth-child(1)")).getText());
+			lesson.setLessonTenpo(driver.findElement(By.cssSelector("div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > strong:nth-child(1)")).getText());
+			lesson.setLessonTimeFrom(CalendarUtil.divideFrom(driver.findElement(By.cssSelector("div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > strong:nth-child(1)")).getText()));
+			lesson.setLessonTimeTo(CalendarUtil.divideTo(driver.findElement(By.cssSelector("div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > strong:nth-child(1)")).getText()));
+			lesson.setLessonName(driver.findElement(By.cssSelector("div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(2) > strong:nth-child(1)")).getText());
+			lesson.setLessonInstructor(driver.findElement(By.cssSelector("div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(5) > td:nth-child(2) > strong:nth-child(1)")).getText());
+			lesson.setLessonMashine(driver.findElement(By.cssSelector("div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(6) > td:nth-child(2) > strong:nth-child(1)")).getText());
 
 			System.out.println("レッスン詳細:" + lesson.getLessonDate() + ":"  + lesson.getLessonInstructor());
 
