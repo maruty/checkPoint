@@ -94,7 +94,7 @@ public class PointSaveBatch extends AbstractPointController{
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
 		System.out.println("モッピー：ログイン成功");
 		//pointパース
-		driver.navigate().refresh();
+		//driver.navigate().refresh();
 		driver.manage().timeouts().implicitlyWait(3 ,TimeUnit.SECONDS);
 
 
