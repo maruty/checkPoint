@@ -161,9 +161,9 @@ public class PointSaveBatch extends AbstractPointController{
 
 		//前日と今日の比較をするためコンペアを行うためデータ抽出
 		List<Point> mobatokuTheDayBeforeList = DbUtil.selectPointData("mobatoku");
-		//インサート用データ
-		Point mobatokuPoint = new Point("mobatoku", MatchUtil.createPoint(pointList2), CalendarUtil.todayUnderNormal());
-
+		//インサート用データpointTemp
+		//Point mobatokuPoint = new Point("mobatoku", MatchUtil.createPoint(pointList2), CalendarUtil.todayUnderNormal());
+		Point mobatokuPoint = new Point("mobatoku", pointTemp, CalendarUtil.todayUnderNormal());
 
 
 		if(mobatokuTheDayBeforeList != null && mobatokuTheDayBeforeList.size() > 0){
