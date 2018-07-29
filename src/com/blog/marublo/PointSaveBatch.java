@@ -24,6 +24,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -235,13 +236,28 @@ public class PointSaveBatch extends AbstractPointController{
 		//2018/1/5 bmonsterのレッスン情報を新たにインサートする
 		System.out.println("bmonsterレッスン数取得");
 		driver.get("https://www.b-monster.jp/");
-		//#gconsole > li:nthchild(1) > button
-		//button.btn
-		driver.findElement(By.cssSelector(".button.btn")).click();
-		driver.findElement(By.name("loginusername")).sendKeys(SettingInitializer.getGmailTrade());
-		driver.findElement(By.name("loginpassword")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
-		driver.findElement(By.cssSelector("#loginbtn")).click();
-		System.out.println("bmonsterログイン成功");
+		//driver.get("https://www.b-monster.jp/reserve/?studio_code=0001");
+
+
+	    driver.manage().timeouts().implicitlyWait(1 ,TimeUnit.SECONDS);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		///html/body/div[1]/header/ul/li[1]/button
+		js.executeScript("var v = document.getElementsByTagName('button');v[0].click();");
+
+		//Thread.sleep(3000);
+		//Thread.sleep(1000);
+
+		driver.findElement(By.cssSelector("#your-id")).sendKeys(SettingInitializer.getGmailTrade());
+		//js.executeScript("document.getElementById('your-id').value='"+USER_ID +"';");
+		driver.manage().timeouts().implicitlyWait(1 ,TimeUnit.SECONDS);
+		//js.executeScript("document.getElementById('your-password').value='"+USER_PASS+ "';");
+		driver.findElement(By.cssSelector("#your-password")).sendKeys(SettingInitializer.MOPPY_PASSWORD);
+		driver.manage().timeouts().implicitlyWait(1 ,TimeUnit.SECONDS);
+		//js.executeScript("document.querySelector(\"#login-btn > span\").click();");
+		driver.findElement(By.cssSelector("#login-btn")).click();
+		driver.manage().timeouts().implicitlyWait(1 ,TimeUnit.SECONDS);
+
+
 		//マイページ表示
 		//最新の1件をダウソ、インサート
 		//#lessonstatus > div:nthchild(2)
