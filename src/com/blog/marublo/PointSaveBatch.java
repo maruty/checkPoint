@@ -277,8 +277,8 @@ public class PointSaveBatch extends AbstractPointController{
 		//#lessonstatus > div:nthchild(2) > table > tbody > tr:nthchild(2) > td > strong
 		Thread.sleep(2000);
 		System.out.println("bmonster：マイページ");
-
-		if(0 < driver.findElements(By.cssSelector("#lessonstatus > div:nthchild(2)")).size()) {
+		//div.form-result:nth-child(2)
+		if(0 < driver.findElements(By.cssSelector("div.form-result:nth-child(2)")).size()) {
 			System.out.println("bmonster：マイページロジック入った");
 			Lesson lesson = new Lesson();
 			//div.form-result:nth-child(2) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > strong:nth-child(1)
